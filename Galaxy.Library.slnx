@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/deploy/" />
+  <Folder Name="/src/" />
+  <Folder Name="/src/Core/">
+    <Project Path="Galaxy.Library.Application/Galaxy.Library.Application.csproj" />
+    <Project Path="Galaxy.Library.Domain/Galaxy.Library.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Infraestructure/">
+    <Project Path="Galaxy.Library.Infraestructure/Galaxy.Library.Infraestructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Presentations/">
+    <Project Path="Galaxy.Library.API/Galaxy.Library.API.csproj" />
+  </Folder>
+</Solution>
