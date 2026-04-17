@@ -6,10 +6,12 @@ using System.Text;
 
 namespace Galaxy.Library.Domain.Entities
 {
-    public class Penalty
+    public class Penalty : BaseEntity
     {
         //public int PenaltyId { get; private set; }
-        public int LoanId { get; private set; }
+        public Guid LoanId { get; private set; }
+        public Loan Loan { get; private set; } = default!;
+
         public Money Amount { get; private set; } = default!;
         public string Reason { get; private set; } = string.Empty;
         public PenaltyStatus Status { get; private set; } = default!;
@@ -17,25 +19,26 @@ namespace Galaxy.Library.Domain.Entities
 
         private Penalty() { }
 
-        private Penalty(int loanId, Money amount, string reason)
+        private Penalty(Loan loan, Money amount, string reason)
         {
-            if (loanId <= 0)
+            if (loan == null)
                 throw new ArgumentException("El préstamo es obligatorio para registrar una multa.");
             if (amount.Value <= 0)
                 throw new ArgumentException("El monto de la multa debe ser mayor a cero.", nameof(amount));
             if (string.IsNullOrEmpty(reason))
                 throw new ArgumentException("La razón de la multa es obligatoria.", nameof(reason));
-            LoanId = loanId;
+            Loan = loan;
+            LoanId = loan.Id;
             Amount = amount;
             Reason = reason;
             Status = PenaltyStatus.Pending;
         }
 
-        public static Penalty Create(int loanId, Money amount, string reason)
+        public static Penalty Create(Loan loan, Money amount, string reason)
         {
             return new Penalty
             (
-               loanId,
+               loan,
                amount,
                reason
             );

@@ -11,7 +11,8 @@ namespace Galaxy.Library.Domain.Entities
         public string Name { get; private set; } = string.Empty;
         public string? Description { get; private set; }
         //public bool IsActive { get; private set; }
-
+        private readonly List<Book> _books = new(); //la privada es para navegar las relaciones que tenga con EF 
+        public IReadOnlyCollection<Book> Books => _books.AsReadOnly();
         private Category() { }
 
 

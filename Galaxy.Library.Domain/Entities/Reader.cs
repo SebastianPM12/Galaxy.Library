@@ -12,8 +12,13 @@ namespace Galaxy.Library.Domain.Entities
         public Email Email { get; private set; } = default!;
         public DocumentNumber DocumentNumber { get; private set; } = default!;
         //public bool IsActive { get; private set; }
+        private readonly List<Loan> _loans = new(); //la privada es para navegar las relaciones que tenga con EF 
+        public IReadOnlyCollection<Loan> Loans => _loans.AsReadOnly();//la publica es para obtener el valor que me esta devolviendo EF y mostrarlo al cliente
 
-        private Reader() { }
+        private readonly List<Reservation> _reservations = new(); //la privada es para navegar las relaciones que tenga con EF 
+        public IReadOnlyCollection<Reservation> Reservations => _reservations.AsReadOnly();//la publica es para obtener el valor que me esta devolviendo EF y mostrarlo al cliente
+
+        private Reader() { } //
 
         private Reader(string fullName, Email email, DocumentNumber documentNumber)
         {

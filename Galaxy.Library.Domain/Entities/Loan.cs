@@ -9,39 +9,46 @@ namespace Galaxy.Library.Domain.Entities
     public class Loan:BaseEntity
     {
         //public int LoanId { get; private set; }
-        public int BookId { get; private set; }
-        public int ReaderId { get; private set; }
+        public Guid BookId { get; private set; }
+        public Book Book { get; private set; } = default!;
+        public Guid ReaderId { get; private set; }
+        public Reader Reader { get; private set; } = default!;
         public DateTime LoanDate { get; private set; }
         public DateTime DueDate { get; private set; }
         public DateTime? ReturnDate { get; private set; }
         public LoanStatus Status { get; private set; } = default!;
         //public bool IsActive { get; private set; }
-
+        public Penalty? Penalty { get; private set; }
         protected Loan() { }
 
-        private Loan(int bookId, int readerId, LoanPeriod period)
+        private Loan( Reader reader, Book book, LoanPeriod period, Penalty? penalty = null)
         {
-            if (bookId <= 0)
+
+            if (book == null)
                 throw new ArgumentException("El libro es obligatorio para registrar un préstamo.");
 
-            if (readerId <= 0)
+            if (reader == null)
                 throw new ArgumentException("El lector es obligatorio para registrar un préstamo.");
 
-            BookId = bookId;
-            ReaderId = readerId;
+            Penalty = penalty;
+            Book = book;
+            BookId = book.Id;
+            Reader = reader;
+            ReaderId = reader.Id;
             LoanDate = period.LoanDate;
             DueDate = period.DueDate;
             Status = LoanStatus.Active;
         }
 
-        public static Loan Create(int bookId, int readerId, LoanPeriod period)
+        public static Loan Create( Reader reader, Book book, LoanPeriod period, Penalty? penalty = null)
         {
 
             return new Loan
             (
-               bookId,
-               readerId,
-               period
+               reader,
+               book,
+               period,
+               penalty
             );
         }
 

@@ -1,0 +1,13 @@
+services:
+    postgresql_hexagonal:
+        image: postgres:latest
+        container_name: bd_library
+        restart: always
+        environment:
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: Password2025
+            POSTGRES_DB: bd_library
+        volumes:
+            - C:\Users\SEBASTIAN PINTO\Documents\Docker\Volumenes.Library\hexagonal_postgresql_volumen:/var/lib/postgresql/data
+        ports:
+            - 1502:5432

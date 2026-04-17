@@ -11,19 +11,30 @@ namespace Galaxy.Library.Domain.Entities
         public string Title { get; private set; } = string.Empty;
         public string Author { get; private set; } = string.Empty;
         public Isbn Isbn { get; private set; } = default!;
-        public int CategoryId { get; private set; }
+        public Category Category { get; private set; } = default!;
+        public string Description { get; private set; } = string.Empty;
+        public Guid CategoryId { get; private set; }
         public int TotalCopies { get; private set; }
         public int AvailableCopies { get; private set; }
         //public bool IsActive { get; private set; }
 
+        private readonly List<Loan> _loans = new(); 
+        public IReadOnlyCollection<Loan> Loans => _loans.AsReadOnly();
+
+        private readonly List<Reservation> _reservations = new();
+        public IReadOnlyCollection<Reservation> Reservations => _reservations.AsReadOnly();
+
         private Book() { }
 
-        private Book(string title, string author, Isbn isbn, int categoryId, int totalCopies)
+        private Book(string title, string author, Isbn isbn, Category category, int totalCopies, string description)
         {
+
             if (string.IsNullOrEmpty(title)) throw new ArgumentNullException("El titulo no puede ser null o vacio", nameof(title));
-            if (string.IsNullOrEmpty(Author)) throw new ArgumentNullException("El autor no puede ser null o vacio", nameof(Author));
+            if (string.IsNullOrEmpty(author)) throw new ArgumentNullException("El autor no puede ser null o vacio", nameof(author));
+            if (string.IsNullOrEmpty(description)) throw new ArgumentNullException("La descripción no puede ser null o vacio", nameof(description));
+
             if (string.IsNullOrEmpty(isbn.Value)) throw new ArgumentNullException("El codigo indentificador del libro no puede ser null o vacio", nameof(isbn.Value));
-            if (categoryId <= 0)
+            if (category == null)
                 throw new ArgumentException("La categoría del libro es obligatoria.");
 
             if (totalCopies <= 0)
@@ -31,13 +42,14 @@ namespace Galaxy.Library.Domain.Entities
 
             Title = title;
             Author =author;
-            CategoryId = categoryId;
+            Category = category;
+            CategoryId = category.Id;
             TotalCopies = totalCopies;
             Isbn = isbn;
             AvailableCopies = totalCopies;
         }
 
-        public static Book Create(string title, string author, Isbn isbn, int categoryId, int totalCopies)
+        public static Book Create(string title, string author, Isbn isbn, Category category, int totalCopies, string description)
         {
 
             return new Book
@@ -45,16 +57,17 @@ namespace Galaxy.Library.Domain.Entities
                title,
                author,
                isbn,
-               categoryId,
-               totalCopies
+               category,
+               totalCopies,
+               description
             );
         }
-        public void UpdatBook(string title, string author, Isbn isbn, int categoryId, int totalCopies)
+        public void UpdatBook(string title, string author, Isbn isbn, Guid categoryId, int totalCopies)
         {
             if (string.IsNullOrEmpty(title)) throw new ArgumentNullException("El titulo no puede ser null o vacio", nameof(title));
             if (string.IsNullOrEmpty(Author)) throw new ArgumentNullException("El autor no puede ser null o vacio", nameof(Author));
             if (string.IsNullOrEmpty(isbn.Value)) throw new ArgumentNullException("El codigo indentificador del libro no puede ser null o vacio", nameof(isbn.Value));
-            if (categoryId <= 0)
+            if (categoryId == Guid.Empty)
                 throw new ArgumentException("La categoría del libro es obligatoria.");
 
             Title = title;
